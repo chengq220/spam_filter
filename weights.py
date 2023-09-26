@@ -23,17 +23,32 @@ class preprocessor:
     def format(self, start_r = 0 , start_c = 0):
         self.df = self.df.iloc[:,:2]
         self.labels = pd.get_dummies(self.df.iloc[:,:1]).iloc[:,:1].to_numpy()
-        # print(labels)
-        self.features = self.df.iloc[:,1:2].to_numpy()
-        self.__process_features()
+        features = self.df.iloc[:,1:2]
+        self.features = self.__tokenize_features(features)
 
-    #change all the labels into numerical values and
-    #process the features into array of individual words
-    def __process_features(self):
-         # labels = pd.get_dummies(self.labels)
-         # self.labels = labels[:,0]
-         print(self.labels.shape)
-         print(self.features.shape)
+    #tokenize the features using space tokenization
+    def __tokenize_features(self, features):
+        features = features['v2'].str.lower().str.split(' ').to_numpy()
+        return features
+
+    #Take the simple approach and just take the product of whether a
+    #text message contains the keyword (without regard to the frequency of such)
+    #word in the text
+    def calc_weights(self):
+        ## TODO: think of a way to efficiently process all the list and
+        ##       and to store the different element and its probability
+        dict = {}
+        for i,feature in enumerate(self.features):
+            label = self.labels[i]
+            print(np.unique(feature).shape)
+            print(label)
+            break
+
+    def forward(self, address):
+        self.read_csv(address)
+        self.format()
+        self.calc_weights()
+        # return weight
 
 
     #return the first n elements in the numpy dataset
@@ -44,7 +59,6 @@ class preprocessor:
 
 
 p = preprocessor()
-p.read_csv("dataset/spam.csv")
-p.format(start_c = 1)
+p.forward("dataset/spam.csv")
 a, b = p.get_top(2)
 # print(p.labels)
