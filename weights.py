@@ -1,5 +1,5 @@
-import numpy as np
 import pandas as pd
+import csv
 
 
 class preprocessor:
@@ -7,8 +7,10 @@ class preprocessor:
         self.df = None
         self.label = None
         self.features = None
+        self.spam_occurence = {}
+        self.word_occurence = {}
 
-    #read the csv file
+    """Read csv file"""
     def read_csv(self, address):
         encoding_type = ['utf-8', 'latin-1', 'cp1252']
         for encoding in encoding_type:
@@ -19,57 +21,50 @@ class preprocessor:
             except UnicodeDecodeError:
                 print(f"Failed to read with encoding: {encoding}")
 
-    #format the dataframe to desired shape
+    """Format the dataframe to desired shape"""
     def format(self, start_r = 0 , start_c = 0):
         self.df = self.df.iloc[:,:2]
-        self.labels = pd.get_dummies(self.df.iloc[:,:1]).iloc[:,:1].to_numpy()
-        features = self.df.iloc[:,1:2]
-        self.features = self.__tokenize_features(features)
+        self.labels = pd.get_dummies(self.df.iloc[:,:1]).iloc[:,:1].to_numpy().squeeze()
+        features = self.df.iloc[:,1:2].to_numpy().squeeze()
+        for i in range(features.shape[0]):
+            self.tokenizeCalc(features[i], self.labels[i])
 
-    #tokenize the features using space tokenization
-    def __tokenize_features(self, features):
-        features = features['v2'].str.lower().str.split(' ').to_numpy()
-        return features
-
-    #Take the simple approach and just take the product of whether a
-    #text message contains the keyword (without regard to the frequency of such)
-    #word in the text
-    def calc_weights(self):
-        ## TODO: think of a way to efficiently process all the list and
-        ##       and to store the different element and its probability
-        # return will look like reward, 125, 3000
-        #                       home, 12, 400
-        spam_dict = {} #key track of keyword for spam
-        word_total = {} #number of total occurence of keyword in spam + non spam
-        for i,feature in enumerate(self.features):
-            label = np.unique(feature)
-            spam = self.labels[i]
-            for item in label:
-                if spam_dict[item] is not None:
-                    if(spam):
-                        spam_dict[item] = spam_dict[item] + [1, 1]
+    """Tokenize the feature and calculate its sample statistics"""
+    def tokenizeCalc(self, feature, label):
+        tokenize = feature.lower().split(' ')
+        for i in tokenize:
+            if(self.word_occurence.get(i, 0) == 0):
+                if(not label):
+                    self.spam_occurence[i] = 1
+                self.word_occurence[i] = 1
+            else:
+                if(not label):
+                    if self.spam_occurence.get(i,0) != 0:
+                        self.spam_occurence[i] = self.spam_occurence[i] + 1
                     else:
-                        spam_dict[item] = spam_dict[item] + [0, 1]
-                else:ds
-                    spam_dict[item] = [1, 1]
-            print(spam_dict[item])
-            break
+                        self.spam_occurence[i] = 1
 
-    def forward(self, address):
-        self.read_csv(address)
-        self.format()
-        self.calc_weights()
-        # return weight
+                self.word_occurence[i] = self.word_occurence[i] + 1
 
+    """Return the weights for the dataset"""
+    def getWeight(self):
+        weight = {}
+        for key in self.spam_occurence.keys():
+            weight[key] = self.spam_occurence[key]/self.word_occurence[key]
+        return weight
 
-    #return the first n elements in the numpy dataset
-    def get_top(self, n = 1):
-        return self.labels[:n], self.features[:n]
+    """Export the weight as """
+    def exportWeight(self):
+        weight = self.getWeight()
+        with open('weight.csv', 'w') as csvfile:
+            writer = csv.writer(csvfile)
+            for key, value in weight.items():
+               writer.writerow([key, value])
 
 
 
 
 p = preprocessor()
-p.forward("dataset/spam.csv")
-a, b = p.get_top(2)
-# print(p.labels)
+p.read_csv("dataset/spam.csv")
+p.format()
+p.exportWeight()
