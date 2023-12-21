@@ -30,6 +30,6 @@ class NaiveBayes:
         print(self.threshold/len(tokenize))
         return probability >= self.threshold/len(tokenize)
 
-model = NaiveBayes("../weight/weight.csv")
+model = NaiveBayes("../weight/weights.csv")
 phrase = "You win 5000 dollars. Claim it by friday"
 model.predict(phrase)
