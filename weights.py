@@ -37,11 +37,22 @@ class preprocessor:
     def calc_weights(self):
         ## TODO: think of a way to efficiently process all the list and
         ##       and to store the different element and its probability
-        dict = {}
+        # return will look like reward, 125, 3000
+        #                       home, 12, 400
+        spam_dict = {} #key track of keyword for spam
+        word_total = {} #number of total occurence of keyword in spam + non spam
         for i,feature in enumerate(self.features):
-            label = self.labels[i]
-            print(np.unique(feature).shape)
-            print(label)
+            label = np.unique(feature)
+            spam = self.labels[i]
+            for item in label:
+                if spam_dict[item] is not None:
+                    if(spam):
+                        spam_dict[item] = spam_dict[item] + [1, 1]
+                    else:
+                        spam_dict[item] = spam_dict[item] + [0, 1]
+                else:ds
+                    spam_dict[item] = [1, 1]
+            print(spam_dict[item])
             break
 
     def forward(self, address):
