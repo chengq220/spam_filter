@@ -28,7 +28,7 @@ class NaiveBayes:
         return weight, word_prob, spam_prob
 
 
-    def predict(self,feature):
+    def predict(self, feature):
         probability = 1
         tokenize = feature.lower().split(' ')
 
@@ -43,7 +43,6 @@ class NaiveBayes:
                 itemProbSpam = (self.word_prob[i] * self.weight[i])
                 itemProbNotSpam = itemProbNotSpam * (1 -self.word_prob[i]) * (1-self.weight[i])
 
-
             #THe probability is the produt of all the probability of the word given
             #that it is a scam
             #
@@ -57,7 +56,8 @@ class NaiveBayes:
         probability = probability/normalize
         return probability >= self.threshold
 
-model = NaiveBayes("../weights")
-phrase = "You just win 5000 dollars. Claim it now"
-prediction = model.predict(phrase)
-print(prediction)
+if __name__ == "__main__":
+    model = NaiveBayes("../weights")
+    phrase = "I'll be going to school now"
+    prediction = model.predict(phrase)
+    print(prediction)
