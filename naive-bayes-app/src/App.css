@@ -1,0 +1,28 @@
+html, body{
+  height:100%;
+  width:100%;
+}
+
+.App{
+  height:100vh;
+}
+
+.container{
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  vertical-align: center;
+  user-select: none;
+}
+
+.classification{
+  height:100%;
+}
+.form_body{
+  height:50%;
+}
+
+.message{
+  margin:25px;
+  height:200px;
+}
