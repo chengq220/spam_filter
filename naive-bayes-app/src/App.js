@@ -1,13 +1,25 @@
 import './App.css';
 import React, { useState } from 'react';
+import axios from "axios";
+import { API_URL } from "./environment/index";
 
 function App() {
   const [spamState, setSpamState]  = useState("Enter something in the text below to check if it is a spam or not!")
 
   function myFunc(message){
+    console.log("function is getting called")
+    var isSpam = false
     if(document.getElementById('message').value.trim() === "") {
       alert("Input should not be empty");
     }else{
+      axios.post(API_URL, message).then(response => {
+        if(response.data == 1){
+          isSpam = true
+        }
+      }).catch(error => {
+        // Handle errors if the request fails
+        console.error('Error sending data to backend:', error);
+      });
       var isSpam = false
       if(isSpam){
         setSpamState("The message is likely a spam message");
@@ -15,6 +27,7 @@ function App() {
         setSpamState("The message is unlikely a spam message");
       }
     }
+    console.log("finish executing")
   }
 
   return (
