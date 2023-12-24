@@ -13,19 +13,16 @@ function App() {
       alert("Input should not be empty");
     }else{
       axios.post(API_URL, message).then(response => {
-        if(response.data == 1){
-          isSpam = true
+        // console.log(response.data)
+        if(response.data === 1){
+          setSpamState("The message is likely a spam message")
+        }else{
+          setSpamState("The message is unlikely a spam message");
         }
       }).catch(error => {
         // Handle errors if the request fails
         console.error('Error sending data to backend:', error);
       });
-      var isSpam = false
-      if(isSpam){
-        setSpamState("The message is likely a spam message");
-      }else{
-        setSpamState("The message is unlikely a spam message");
-      }
     }
     console.log("finish executing")
   }
