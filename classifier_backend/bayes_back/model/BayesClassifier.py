@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import os
 
 class NaiveBayes:
     def __init__(self, weight_loc, threshold=0.5):
@@ -9,20 +10,23 @@ class NaiveBayes:
     """Initilialize the weights for the model"""
     def getWeight(self,address):
         weight = {}
-        df = pd.read_csv(address + "/weight_pba.csv")
+        path = os.path.expanduser("~/spam_filter/weights/weight_pba.csv")
+        df = pd.read_csv(path)
         key = df.iloc[:,0].to_numpy().squeeze()
         prob = df.iloc[:,1].to_numpy().squeeze()
         for i in range(key.shape[0]):
             weight[key[i]] = prob[i]
 
         word_prob = {}
-        df = pd.read_csv(address + "/weight_pa.csv")
+        path = os.path.expanduser("~/spam_filter/weights/weight_pa.csv")
+        df = pd.read_csv(path)
         key = df.iloc[:,0].to_numpy().squeeze()
         prob = df.iloc[:,1].to_numpy().squeeze()
         for i in range(key.shape[0]):
             word_prob[key[i]] = prob[i]
 
-        file = open(address + "/weight_pb.txt", "r")
+        path = os.path.expanduser("~/spam_filter/weights/weight_pb.txt")
+        file = open(path, "r")
         spam_prob = float(file.read())
 
         return weight, word_prob, spam_prob
@@ -43,7 +47,7 @@ class NaiveBayes:
                 itemProbSpam = (self.word_prob[i] * self.weight[i])
                 itemProbNotSpam = itemProbNotSpam * (1 -self.word_prob[i]) * (1-self.weight[i])
 
-            #THe probability is the produt of all the probability of the word given
+            #The probability is the produt of all the probability of the word given
             #that it is a scam
             #
             probability = probability * itemProbSpam
