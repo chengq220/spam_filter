@@ -8,7 +8,6 @@ function App() {
 
   function myFunc(message){
     console.log("function is getting called")
-    var isSpam = false
     if(document.getElementById('message').value.trim() === "") {
       alert("Input should not be empty");
     }else{
@@ -29,15 +28,15 @@ function App() {
 
   return (
     <div className="App">
-      <table className="container">
-        <tr className="classification">
+      <div className="container">
+        <div className="classification">
           <p>{spamState}</p>
-        </tr>
-        <tr className="form_body">
+        </div>
+        <div className="form_body">
           <input type="text" id="message" name="message" placeholder="Enter the text here"></input>
-          <button onClick= {() => myFunc(document.getElementById('message').value)}>Check</button>
-        </tr>
-      </table>
+          <div id="submit" onClick= {() => myFunc(document.getElementById('message').value)}>Send</div>
+        </div>
+      </div>
     </div>
   );
 }

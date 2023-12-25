@@ -11,7 +11,7 @@ def handlePredict(request):
         input = list(request.data.keys())[0]
         # print(list(request.data.keys())[0])
         bayes_pred = BayesBackConfig.MODEL.predict(input)
-        print("prediction: ", bayes_pred)
+        # print("prediction: ", bayes_pred)
         if(bayes_pred):
             return Response(1)
         else:
