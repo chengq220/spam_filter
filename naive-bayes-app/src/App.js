@@ -13,19 +13,16 @@ function App() {
     }else{
       setTimeout(ProgressBar(), 1000);
       axios.post(API_URL, message).then(response => {
+        var bodyElement = document.querySelector('body');
         // console.log(response.data)
         if(response.data === 1){
-          var bodyElement = document.querySelector('body');
           bodyElement.style.backgroundColor = "red";
           setSpamState("The message is likely a spam message");
-          setTimeout(() => {bodyElement.style.backgroundColor = "#ffffff"}, 1500);
         }else{
-          var bodyElement = document.querySelector('body');
           bodyElement.style.backgroundColor = "green";
           setSpamState("The message is unlikely a spam message");
-          setTimeout(() => {bodyElement.style.backgroundColor = "#ffffff"}, 1500);
         }
-        document.querySelector('#message').value = "Enter text here";
+        setTimeout(() => {bodyElement.style.backgroundColor = "#ffffff"}, 1500);
       }).catch(error => {
         // Handle errors if the request fails
         console.error('Error sending data to backend:', error);
@@ -53,7 +50,8 @@ function App() {
 
   function clear(){
     document.querySelector(".progressBar").style.width = "0%";
-    document.querySelector('#message').value = "Enter text here";
+    document.querySelector('#message').value = "";
+    setSpamState("Enter something in the text below to check if it is a spam or not!");
   }
 
   return (
