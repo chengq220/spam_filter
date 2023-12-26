@@ -1,49 +1,83 @@
 html, body, .App, #root{
   height:100%;
   width:100%;
+  user-select:none;
+}
+
+body{
+  transition-duration:0.5s;
 }
 
 p{
   user-select: none;
 }
 
-.App{
+textarea{
+  padding: 10px 0px 0px 10px;
+  border-radius: 8px;
+  border: 3px solid #ccc;
+  border-width: 0.5px;
+  resize: none;
+  width:50%;
+}
+
+.container{
+  height: calc(100% - 15px);
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
+
 }
 
 #form_body{
   padding:25px;
+  user-select:none;
 }
 
 .form_body{
   display:flex;
-  align-items: stretch;
+  align-items:stretch;
+  position:relative;
 }
 
 #message{
   background-color: #eff5f5;
+  height:75px;
+  padding-right:10px;
 }
 
-#submit{
+.buttonContainer{
+  display:flex;
+  width: 90%;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#submit, #clear{
+  position:relative;
   margin-left:10px;
   user-select: none;
   transition-duration:1s;
   width:25%;
+  height: 25px;
   padding: 5px 2px 5px 2px;
   border-radius: 10px;
   background-color: #94b8b8;
 
 }
 
-#submit:hover{
+#submit:hover, #clear:hover{
   color:white;
   background-color: #5c8a8a;
   cursor: pointer;
 }
 
+.progressBar{
+  height:15px;
+  width:0%;
+  background-color:blue;
+}
 
 @media (max-width: 500px) {
   .form_body{
@@ -54,8 +88,20 @@ p{
     text-align:center;
   }
 
-  #submit{
+  .buttonContainer{
+    display:flex;
+    width:90%;
+    align-items: center;
+    justify-content: center;
+    /* flex-direction: column;
+    justify-content: space-between; */
+  }
+
+  #submit, #clear{
     margin:10px;
+  }
+
+  #submit:first-child{
     padding: 5px;
   }
 }
